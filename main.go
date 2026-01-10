@@ -1,13 +1,24 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"study/feature"
-	"study/feature_conection/simple_conection"
+	"study/sql/create_table"
+	"study/sql/create_user"
+	"study/sql/simple_conection"
 )
 
 func main() {
-	fmt.Println("Hello, Git!")
-	feature.Feature1()
-	simple_conection.CheckConection()
+	ctx := context.Background()
+	conn, err := simple_conection.CreateConnect(ctx)
+	if err != nil {
+		panic(err)
+	}
+	if err := create_table.CreateTable(*conn, ctx); err != nil {
+		panic(err)
+	}
+	if err := create_user.CreateUser(*conn, ctx); err != nil {
+		panic(err)
+	}
+	fmt.Println("successfully!")
 }
