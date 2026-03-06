@@ -5,17 +5,16 @@ import (
 	"fmt"
 	"net/http"
 	"study/handlers"
-	simple_conection "study/sql/conection"
-	"study/sql/create_table"
+	"study/sql"
 )
 
 func main() {
 	ctx := context.Background()
-	conn, err := simple_conection.CreateConnect(ctx)
+	conn, err := sql.CreateConnect(ctx)
 	if err != nil {
 		panic(err)
 	}
-	if err := create_table.CreateTable(*conn, ctx); err != nil {
+	if err := sql.CreateTable(*conn, ctx); err != nil {
 		panic(err)
 	}
 	http.HandleFunc("/task", handlers.CreateTaskHandler(conn))

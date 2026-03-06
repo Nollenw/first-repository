@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	maketask "study/makeTask"
-	create_user "study/sql/create_tasks"
+	"study/sql"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -26,12 +26,12 @@ func CreateTaskHandler(conn *pgx.Conn) http.HandlerFunc {
 		task.TimeCreate = time.Now()
 		task.IsCompleted = false
 
-		if err := create_user.CreateTask(*conn, r.Context(), &task); err != nil {
+		if err := sql.CreateTask(*conn, r.Context(), &task); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
 		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(task)
+		//json.NewEncoder(w).Encode(task)
 	}
 }
